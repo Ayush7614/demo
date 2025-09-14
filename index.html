@@ -5,22 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Birthday Ayesha!</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap');
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
         }
         
         body {
-            font-family: 'Comic Neue', cursive;
             background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fbc2eb, #a6c1ee);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             height: 100vh;
             overflow: hidden;
-            color: #ff0080;
+            color: #fff;
             text-align: center;
         }
         
@@ -40,7 +38,7 @@
         
         h1 {
             font-size: 4rem;
-            text-shadow: 3px 3px 0 #ffdd00, 6px 6px 0 #00ffcc;
+            text-shadow: 3px 3px 0 #ff6b6b, 6px 6px 0 #4ecdc4;
             margin: 20px 0;
             animation: bounce 2s infinite;
         }
@@ -66,6 +64,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             font-size: 1.2rem;
             line-height: 1.6;
+            color: #333;
         }
         
         .sorry {
@@ -88,18 +87,12 @@
             overflow: hidden;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
             background: #fff;
-            position: relative;
         }
         
-        .photo-placeholder {
+        .photo-frame img {
             width: 100%;
             height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
-            color: #7e00ff;
-            font-weight: bold;
+            object-fit: cover;
         }
         
         .controls {
@@ -148,20 +141,6 @@
             50% { transform: translateY(-20px) rotate(20deg); }
         }
         
-        .file-input {
-            display: none;
-        }
-        
-        .file-label {
-            background: #00ccff;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 50px;
-            cursor: pointer;
-            display: inline-block;
-            margin: 10px;
-        }
-        
         .crazy-text {
             font-size: 1.5rem;
             font-weight: bold;
@@ -176,12 +155,26 @@
             75% { color: #ffdd00; }
             100% { color: #ff0080; }
         }
+        
+        .hearts {
+            position: absolute;
+            font-size: 2rem;
+            animation: floatHearts 6s ease-in-out infinite;
+            opacity: 0.7;
+        }
+        
+        @keyframes floatHearts {
+            0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            50% { transform: translateY(-100px) translateX(50px) rotate(180deg); }
+            100% { transform: translateY(-200px) translateX(0) rotate(360deg); opacity: 0; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Happy Birthday Ayesha!</h1>
-        <div class="birthday-date">20 September 2025</div>
+        <div class="birthday-date">15 September 2025</div>
         
         <div class="message">
             <p>To my <span class="crazy-text">beautiful</span>, <span class="crazy-text">innocent</span> best friend Ayesha!</p>
@@ -191,25 +184,17 @@
         </div>
         
         <div class="photo-frame">
-            <div class="photo-placeholder" id="photoPlaceholder">
-                Add Ayesha's Photo Here!
-            </div>
+            <img src="ayesha.png" alt="Ayesha's Photo" id="ayeshaPhoto">
         </div>
         
         <div class="controls">
-            <label for="photoUpload" class="file-label">Add Ayesha's Photo</label>
-            <input type="file" id="photoUpload" class="file-input" accept="image/*">
-            
-            <label for="musicUpload" class="file-label">Add Birthday Music</label>
-            <input type="file" id="musicUpload" class="file-input" accept="audio/*">
-            
-            <button id="playButton">Play Music</button>
+            <button id="playButton">Play Birthday Music</button>
             <button id="confettiButton">More Confetti!</button>
         </div>
         
-        <audio id="birthdayMusic" loop>
-            <!-- Default audio source, will be replaced by user upload -->
-            <source src="" type="audio/mpeg">
+        <audio id="birthdayMusic">
+            <source src="music.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
         </audio>
     </div>
 
@@ -221,46 +206,13 @@
             // Add some floating music notes
             createMusicNotes(5);
             
-            // Photo upload functionality
-            const photoUpload = document.getElementById('photoUpload');
-            const photoPlaceholder = document.getElementById('photoPlaceholder');
+            // Add floating hearts
+            createHearts(10);
             
-            photoUpload.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(event) {
-                        photoPlaceholder.innerHTML = '';
-                        const img = document.createElement('img');
-                        img.src = event.target.result;
-                        img.style.width = '100%';
-                        img.style.height = '100%';
-                        img.style.objectFit = 'cover';
-                        photoPlaceholder.appendChild(img);
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-            
-            // Music upload functionality
-            const musicUpload = document.getElementById('musicUpload');
+            // Music functionality
             const birthdayMusic = document.getElementById('birthdayMusic');
             const playButton = document.getElementById('playButton');
             
-            musicUpload.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(event) {
-                        birthdayMusic.src = event.target.result;
-                        birthdayMusic.load();
-                        playButton.textContent = 'Play Music';
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-            
-            // Play button functionality
             playButton.addEventListener('click', function() {
                 if (birthdayMusic.paused) {
                     birthdayMusic.play();
@@ -318,6 +270,22 @@
                 }
             }
             
+            // Function to create floating hearts
+            function createHearts(count) {
+                const container = document.querySelector('.container');
+                
+                for (let i = 0; i < count; i++) {
+                    const heart = document.createElement('div');
+                    heart.className = 'hearts';
+                    heart.textContent = '❤️';
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.animationDelay = Math.random() * 5 + 's';
+                    heart.style.fontSize = (Math.random() * 1 + 1) + 'rem';
+                    
+                    container.appendChild(heart);
+                }
+            }
+            
             // Add some crazy text effects
             const crazyTexts = document.querySelectorAll('.crazy-text');
             crazyTexts.forEach(text => {
@@ -331,6 +299,12 @@
                     this.style.transform = 'rotate(0deg)';
                 });
             });
+            
+            // Auto start music after a delay
+            setTimeout(() => {
+                birthdayMusic.play();
+                playButton.textContent = 'Pause Music';
+            }, 3000);
         });
     </script>
 </body>
